@@ -87,21 +87,30 @@ the README's table.
 ```bash
 make test             # tests/test_bake.py: no Smarter needed
 make test-generated   # generate both starters into build/, run each one's scripts/run-tests.sh --validate
+make lint-generated   # generate each starter, cached and uncached, and run its pre-commit hooks
 ```
 
-`make test-generated` needs the `smarter-app` container of `../smarter` running. Run it after
-any change to what is generated. To lint the generated output as its own Lint workflow will, run
-pre-commit in a generated copy: it needs a git repository, and untracked files must be passed
-explicitly, because `git add` is a write you don't run:
+`make test-generated` needs the `smarter-app` container of `../smarter` running. Run it, and
+`make lint-generated`, after any change to what is generated.
 
-```bash
-cd build/smarter-extension-example-web-api && git init -q
-find . -type f -not -path './.git/*' -print0 | xargs -0 ../../venv/bin/pre-commit run --files
-```
+**Never lint generated output by passing untracked files to `pre-commit run --files`.** pre-commit
+detects a hook's rewrite with `git diff`, which doesn't see untracked files, so a hook that
+rewrites one (pydocstringformatter, isort, black, Prettier) reports "Passed". `make lint-generated`
+compares the linted copy with an untouched one instead, so a rewrite fails, as it does in CI,
+where the files are staged. For the same reason, a template file that isn't committed yet can't be
+checked by running the hooks on it.
+
+Two other traps:
+
+- The template renders different code for each starter and for `cache_ttl` 0 and above, so lint
+  every combination. `lint-generated` and CI do.
+- This repository's `.prettierignore` excludes `{{cookiecutter.repository_name}}/`, so Prettier
+  run from here silently skips the generated skills and README. Format them in a generated copy,
+  or a copy outside this repository.
 
 CI (`.github/workflows/test.yml`) runs the template tests and the template repository's own hooks,
-then, per starter, generates an extension, runs its tests against a sparse checkout of Smarter
-with `--fail-under=100`, and runs its hooks.
+then, per starter and `cache_ttl`, generates an extension, runs its tests against a sparse
+checkout of Smarter with `--fail-under=100`, and runs its hooks on the staged files.
 
 ## Files shared with the official extensions
 
@@ -134,8 +143,8 @@ with line length 120.
 
 ## Definition of done
 
-- `make test` passes, and `make test-generated` for any change to what is generated.
-- The generated output passes its pre-commit hooks.
+- `make test` passes, and `make test-generated` and `make lint-generated` for any change to
+  what is generated.
 - The README's questions table and tree match the template.
 - Shared files are the same here and in the official extensions, or your summary says which
   official extensions still need the change.

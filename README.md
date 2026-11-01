@@ -80,6 +80,7 @@ published with a pull request to the
 make init             # a virtual environment with cookiecutter and pre-commit, and the hooks
 make test             # generate extensions with different answers, and check them
 make test-generated   # generate both starters, and run their own tests in a Smarter container
+make lint-generated   # generate each starter, cached and uncached, and run its pre-commit hooks
 make bake             # generate one into build/, to look at
 make lint
 ```

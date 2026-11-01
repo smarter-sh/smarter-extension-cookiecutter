@@ -11,7 +11,7 @@ PIP := $(PYTHON) -m pip
 BUILD := build
 
 .PHONY: all init check-python python-init python-clean pre-commit-init pre-commit-run pre-commit-update \
-	lint test bake test-generated clean help
+	lint test bake test-generated lint-generated clean help
 
 # Default target executed when no arguments are given to make.
 all: help
@@ -72,6 +72,26 @@ test-generated:
 	$(BUILD)/smarter-extension-example-web-api/scripts/run-tests.sh --validate && \
 	$(BUILD)/smarter-extension-example-function/scripts/run-tests.sh --validate
 
+# generate each starter, cached and uncached, and run its pre-commit hooks, as its Lint workflow
+# and this repository's Test workflow do. The files aren't staged, so pre-commit can't see what a
+# hook rewrites and reports it as passed: a second, untouched copy is generated, and any
+# difference from it fails.
+lint-generated:
+	$(ACTIVATE_VENV) && \
+	for starter in web-api pure-function; do for ttl in 0 60; do \
+		dir=$(BUILD)/lint/$$starter-$$ttl; \
+		echo "== $$starter, cache_ttl=$$ttl"; \
+		for copy in pristine linted; do \
+			cookiecutter --no-input --overwrite-if-exists --output-dir $$dir/$$copy . extension_name="Example Tool" \
+				starter=$$starter cache_ttl=$$ttl >/dev/null || exit 1; \
+		done; \
+		(cd $$dir/linted/smarter-extension-example-tool && { [ -d .git ] || git init -q; } && \
+			find . -type f -not -path './.git/*' -not -path './node_modules/*' -print0 | \
+			SKIP=commitlint xargs -0 pre-commit run --files) || exit 1; \
+		diff -r --exclude=.git --exclude=node_modules --exclude=.claude $$dir/pristine/smarter-extension-example-tool \
+			$$dir/linted/smarter-extension-example-tool || { echo "a hook rewrote the files above"; exit 1; }; \
+	done; done
+
 clean:
 	make python-clean
 	rm -rf $(BUILD)
@@ -82,6 +102,7 @@ help:
 	@echo 'test                   - Run the template tests (generate and check extensions)'
 	@echo 'bake                   - Generate an extension with the default answers into build/'
 	@echo 'test-generated         - Generate both starters and run their tests in smarter-app'
+	@echo 'lint-generated         - Generate both starters and run their pre-commit hooks'
 	@echo 'lint                   - Run all code linters and formatters (pre-commit)'
 	@echo 'clean                  - Delete the virtual environment and build/'
 	@echo '===================================================================='

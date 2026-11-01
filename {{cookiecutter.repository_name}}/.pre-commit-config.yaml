@@ -23,6 +23,8 @@ repos:
     hooks:
       - id: prettier
         args: [--no-error-on-unmatched-pattern]
+        # semantic-release writes CHANGELOG.md in its own Markdown style, on each release.
+        exclude: ^CHANGELOG\.md$
   - repo: https://github.com/psf/black
     rev: 26.10.1
     hooks:

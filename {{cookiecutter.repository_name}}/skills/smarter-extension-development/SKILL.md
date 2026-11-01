@@ -17,18 +17,18 @@ containers are part of this repository's toolchain.
 
 ## Repository map
 
-| Path                         | What lives there                                                                   |
-| ---------------------------- | ---------------------------------------------------------------------------------- |
-| `pyproject.toml`             | `[project]` (name, version, dependencies) and `[tool.smarter]` (slug, tools, ...)  |
-| `<package>/__init__.py`      | Only the module docstring: the extension's documentation, in reStructuredText      |
-| `<package>/tools.py`         | The tools: `SmarterExtensionTool` subclasses, one per tool                         |
-| `<package>/models.py`        | Pydantic models of the arguments and the result (weather; small ones in tools.py) |
-| `<package>/services.py`      | Calls to third-party services, kept out of the tools (weather)                     |
-| `tests/test_tools.py`        | unittest tests that call the tools directly, services mocked                       |
-| `scripts/`                   | `set_version.py` and `package.py`, run by semantic-release. Standard library only  |
-| `release.config.js`          | semantic-release: versioning, CHANGELOG, archive, GitHub release                   |
-| `.github/workflows/`         | `test.yml` (tests + Codecov against a checkout of Smarter), `release.yml`          |
-| `skills/`, `CLAUDE.md`       | Agent Skills and agent instructions. Not part of the archive                       |
+| Path                    | What lives there                                                                  |
+| ----------------------- | --------------------------------------------------------------------------------- |
+| `pyproject.toml`        | `[project]` (name, version, dependencies) and `[tool.smarter]` (slug, tools, ...) |
+| `<package>/__init__.py` | Only the module docstring: the extension's documentation, in reStructuredText     |
+| `<package>/tools.py`    | The tools: `SmarterExtensionTool` subclasses, one per tool                        |
+| `<package>/models.py`   | Pydantic models of the arguments and the result (weather; small ones in tools.py) |
+| `<package>/services.py` | Calls to third-party services, kept out of the tools (weather)                    |
+| `tests/test_tools.py`   | unittest tests that call the tools directly, services mocked                      |
+| `scripts/`              | `set_version.py` and `package.py`, run by semantic-release. Standard library only |
+| `release.config.js`     | semantic-release: versioning, CHANGELOG, archive, GitHub release                  |
+| `.github/workflows/`    | `test.yml` (tests + Codecov against a checkout of Smarter), `release.yml`         |
+| `skills/`, `CLAUDE.md`  | Agent Skills and agent instructions. Not part of the archive                      |
 
 `pyproject.toml`'s `[tool.smarter]` names the slug, the package and the tools' classes. Read it
 first.
@@ -51,8 +51,8 @@ first.
    its own, so the package's own name isn't importable there. Tests are the exception: they
    import the package by name.
 6. **The slug is permanent.** LLMClient manifests list it and platforms track updates by it. Never
-   change `slug`, a tool's `name`, or remove a setting, without a major release (a `BREAKING
-   CHANGE`), and say so before doing it.
+   change `slug`, a tool's `name`, or remove a setting, without a major release (a
+   `BREAKING CHANGE`), and say so before doing it.
 7. **This repository is public.** No API keys, tokens, account ids or private hostnames, in code,
    tests or skills. Tests use placeholders such as `SecretStr("test-key")`.
 
@@ -113,9 +113,9 @@ copied from it unchanged, and are identical in every official extension: `releas
 `scripts/package.py`, `scripts/set_version.py`, `scripts/run-tests.sh`, and everything under
 `skills/`.
 
-- **In an official extension** (smarter-sh/smarter-extension-*), a change to one of them is made
-  in the template and in every official extension, in the same piece of work. Check that they
-  still agree, from the extension's root:
+- **In an official extension** (a `smarter-sh/smarter-extension-<slug>` repository), a change to
+  one of them is made in the template and in every official extension, in the same piece of work.
+  Check that they still agree, from the extension's root:
 
   ```bash
   T=../smarter-extension-cookiecutter/'{{cookiecutter.repository_name}}'
@@ -203,11 +203,11 @@ The host shell may be zsh, which doesn't word-split `$FILES`. Use `xargs`, as ab
 
 ## Which skill to load
 
-| Task                                                                 | Skill                           |
-| -------------------------------------------------------------------- | ------------------------------- |
-| Writing, running or fixing the tests; coverage; `validate_extension` | `smarter-extension-testing`     |
-| How a change gets released, version numbers, the GitHub release      | `smarter-extension-release`     |
-| Writing a commit message                                             | `smarter-extension-git-commits` |
+| Task                                                                 | Skill                                                    |
+| -------------------------------------------------------------------- | -------------------------------------------------------- |
+| Writing, running or fixing the tests; coverage; `validate_extension` | `smarter-extension-testing`                              |
+| How a change gets released, version numbers, the GitHub release      | `smarter-extension-release`                              |
+| Writing a commit message                                             | `smarter-extension-git-commits`                          |
 | Publishing a release to the registry                                 | `extensions-registry-entry`, in `../extensions-registry` |
 
 ## Definition of done

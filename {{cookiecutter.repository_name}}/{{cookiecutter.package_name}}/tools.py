@@ -13,14 +13,14 @@ class {{ cookiecutter.tool_class }}(SmarterExtensionTool):
     """{{ cookiecutter.description }}"""
 
     name = "{{ cookiecutter.tool_name }}"
-    """The tool's name. The LLM sees it as ``ext_{{ cookiecutter.extension_slug | replace('-', '_') }}_{{ cookiecutter.tool_name }}``."""
+    """The tool's name, which the LLM sees as ``ext_{{ cookiecutter.extension_slug | replace('-', '_') }}_{{ cookiecutter.tool_name }}``."""
     arguments_model = {{ cookiecutter.tool_class }}Arguments
-    """The arguments the LLM must give. Smarter validates them, and offers their JSON schema to the LLM."""
+    """The arguments the LLM must give, which Smarter validates and offers to the LLM as a JSON schema."""
     cache_ttl = {{ cookiecutter.cache_ttl }}
     {%- if cookiecutter.cache_ttl | int > 0 %}
     """A search changes nothing, and its result depends only on the query and the settings, not on who asks."""
     {%- else %}
-    """Results are not cached. Cache them only if the tool changes nothing and answers the same whoever asks."""
+    """Results aren't cached: cache them only if the tool changes nothing and answers the same whoever asks."""
     {%- endif %}
 
     def call(self, arguments: {{ cookiecutter.tool_class }}Arguments, context: ExtensionContext) -> JsonValue:
@@ -59,14 +59,14 @@ class {{ cookiecutter.tool_class }}(SmarterExtensionTool):
     """{{ cookiecutter.description }}"""
 
     name = "{{ cookiecutter.tool_name }}"
-    """The tool's name. The LLM sees it as ``ext_{{ cookiecutter.extension_slug | replace('-', '_') }}_{{ cookiecutter.tool_name }}``."""
+    """The tool's name, which the LLM sees as ``ext_{{ cookiecutter.extension_slug | replace('-', '_') }}_{{ cookiecutter.tool_name }}``."""
     arguments_model = {{ cookiecutter.tool_class }}Arguments
-    """The arguments the LLM must give. Smarter validates them, and offers their JSON schema to the LLM."""
+    """The arguments the LLM must give, which Smarter validates and offers to the LLM as a JSON schema."""
     cache_ttl = {{ cookiecutter.cache_ttl }}
     {%- if cookiecutter.cache_ttl | int > 0 %}
     """The same text always has the same counts, whoever asks."""
     {%- else %}
-    """Results are not cached. Cache them only if the tool changes nothing and answers the same whoever asks."""
+    """Results aren't cached: cache them only if the tool changes nothing and answers the same whoever asks."""
     {%- endif %}
 
     def call(self, arguments: {{ cookiecutter.tool_class }}Arguments, context: ExtensionContext) -> JsonValue:

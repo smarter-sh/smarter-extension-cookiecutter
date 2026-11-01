@@ -18,9 +18,10 @@ extension, not instructions for this repository; read them when you change them.
 
 1. **Never run git write commands.** "Write a git commit" means print the command as text. See
    `smarter-extension-cookiecutter-git-commits`.
-2. **Run the tests yourself** after any change: `make test`, and `make test-generated` for any
-   change to the generated repository's code, tests or scripts. Never ask the user to. Report
-   failures honestly.
+2. **Run the tests yourself** after any change: `make test`, and `make test-generated` and
+   `make lint-generated` for any change to what is generated. Never ask the user to. Report
+   failures honestly. Don't lint untracked files with `pre-commit run --files`: a hook's rewrite
+   of one reports "Passed".
 3. **Files shared with the official extensions stay identical**: `release.config.js`,
    `package.json`, `.github/workflows/release.yml`, `.github/workflows/test.yml`, `scripts/` and
    `skills/` in `{{cookiecutter.repository_name}}/`. A change to one is made in every official
@@ -43,7 +44,8 @@ co-author: the last `-m` is `Co-authored-by: Lawrence McDaniel <lpm0073@gmail.co
 
 ## Definition of done
 
-- `make test` passes, and `make test-generated` for changes to what is generated.
+- `make test` passes, and `make test-generated` and `make lint-generated` for changes to what is
+  generated.
 - The pre-commit hooks pass on the changed files.
 - The README's questions table and tree match `cookiecutter.json` and the template.
 - Your summary says what changed, what you verified, what you skipped, and whether the official

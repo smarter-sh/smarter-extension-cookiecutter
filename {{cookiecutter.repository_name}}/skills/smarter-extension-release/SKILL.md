@@ -12,12 +12,12 @@ semantic-release with `release.config.js`. Nobody bumps a version by hand.
 
 semantic-release reads the conventional commits since the last `v*` tag:
 
-| Commit                                    | Release                      |
-| ----------------------------------------- | ---------------------------- |
-| `feat:`                                   | minor (0.2.0 to 0.3.0)       |
-| `fix:`, `perf:`                           | patch (0.2.1 to 0.2.2)       |
-| `BREAKING CHANGE:` in the body, or `feat!:` | major                      |
-| `docs`, `test`, `style`, `refactor`, `ci`, `build`, `chore` | nothing      |
+| Commit                                                      | Release                |
+| ----------------------------------------------------------- | ---------------------- |
+| `feat:`                                                     | minor (0.2.0 to 0.3.0) |
+| `fix:`, `perf:`                                             | patch (0.2.1 to 0.2.2) |
+| `BREAKING CHANGE:` in the body, or `feat!:`                 | major                  |
+| `docs`, `test`, `style`, `refactor`, `ci`, `build`, `chore` | nothing                |
 
 So the commit type is a release decision. A change that the platform's users would notice (a tool's
 behavior, its arguments, its result, a setting, a dependency pin) must be `fix`, `perf` or `feat`,

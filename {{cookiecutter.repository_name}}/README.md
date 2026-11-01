@@ -40,18 +40,16 @@ make lint        # every pre-commit hook, on every file
 make package     # dist/{{ cookiecutter.extension_slug }}-<version>.zip, as a release builds it
 ```
 
-| Path                                       | Contents                                                       |
-| ------------------------------------------ | -------------------------------------------------------------- |
-| `pyproject.toml`                           | `[project]` and `[tool.smarter]`: slug, tools, settings        |
-| `{{ cookiecutter.package_name }}/__init__.py` | The documentation that administrators read (reStructuredText) |
-| `{{ cookiecutter.package_name }}/tools.py`    | The `{{ cookiecutter.tool_name }}` tool                        |
+- `pyproject.toml`: `[project]` and `[tool.smarter]`, with the slug, the tools and the settings
+- `{{ cookiecutter.package_name }}/__init__.py`: the documentation that administrators read, in reStructuredText
+- `{{ cookiecutter.package_name }}/tools.py`: the `{{ cookiecutter.tool_name }}` tool
 {%- if cookiecutter.starter == "web-api" %}
-| `{{ cookiecutter.package_name }}/models.py`   | The tool's arguments and result                                |
-| `{{ cookiecutter.package_name }}/services.py` | The calls to the third-party service                           |
+- `{{ cookiecutter.package_name }}/models.py`: the tool's arguments and result
+- `{{ cookiecutter.package_name }}/services.py`: the calls to the third-party service
 {%- endif %}
-| `tests/`                                   | unittest tests, run against Smarter                            |
-| `scripts/`                                 | The test runner, and the release's version and archive scripts |
-| `skills/`, `CLAUDE.md`                     | Instructions for AI coding agents                              |
+- `tests/`: unittest tests, run against Smarter
+- `scripts/`: the test runner, and the release's version and archive scripts
+- `skills/`, `CLAUDE.md`: instructions for AI coding agents
 
 Start with the [developer guide](https://docs.smarter.sh/en/latest/smarter-framework/extensions/developer-guide.html),
 and the official extensions, e.g.

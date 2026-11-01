@@ -1,9 +1,10 @@
 # Test the template on every push to main and every pull request:
 #
 # - template: tests/test_bake.py generates extensions with different answers and checks them.
-# - generated: for each starter, generate an extension, run its own tests with coverage against a
-#   source checkout of Smarter (as the extension's own Test workflow will), and run its pre-commit
-#   hooks (as its Lint workflow will). A template change that breaks a new extension fails here.
+# - generated: for each starter, cached and uncached (the template renders different code for
+#   each), generate an extension, run its own tests with coverage against a source checkout of
+#   Smarter (as the extension's own Test workflow will), and run its pre-commit hooks (as its Lint
+#   workflow will). A template change that breaks a new extension fails here.
 #
 # SMARTER_REF is the branch or tag of smarter-sh/smarter whose code the generated tests run against:
 # main, the latest release.
@@ -45,6 +46,7 @@ jobs:
       fail-fast: false
       matrix:
         starter: [web-api, pure-function]
+        cache_ttl: [0, 60]
     steps:
       - uses: actions/checkout@v7
         with:
@@ -58,7 +60,7 @@ jobs:
         run: pip install -r template/requirements/local.txt
 
       - name: Generate an extension
-        run: cookiecutter --no-input --output-dir build template extension_name="Example Tool" starter=${{ matrix.starter }} cache_ttl=60
+        run: cookiecutter --no-input --output-dir build template extension_name="Example Tool" starter=${{ matrix.starter }} cache_ttl=${{ matrix.cache_ttl }}
 
       - name: Check out Smarter
         uses: actions/checkout@v7

@@ -3,9 +3,11 @@
 import unittest
 {%- if cookiecutter.starter == "web-api" %}
 from unittest.mock import patch
-
-from pydantic import SecretStr
 {%- endif %}
+
+{% if cookiecutter.starter == "web-api" -%}
+from pydantic import SecretStr
+{% endif -%}
 from smarter.apps.llmtool.extension.testing import call_tool{% if cookiecutter.starter == "web-api" %}, tool_context{% endif %}
 {% if cookiecutter.starter == "web-api" %}
 from {{ cookiecutter.package_name }}.services import ServiceError

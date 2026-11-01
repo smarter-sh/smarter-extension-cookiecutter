@@ -6,6 +6,7 @@ Smarter: the Test workflow does that, and so does ``make test-generated``.
 """
 
 import ast
+import re
 import tempfile
 import tomllib
 import unittest
@@ -53,9 +54,10 @@ def docstring_problems(root: Path) -> list[str]:
     Find the Python code under a directory that doesn't meet Smarter's docstring standard.
 
     The standard is Smarter's (its ``smarter-docstrings`` skill), which Sphinx renders: every module,
-    class and function has a docstring, whose first line is a one-line summary ending with a period,
-    and a function's docstring has the fields :func:`missing_fields` requires. The template is the
-    example that authors copy, so it must meet the standard it asks of them.
+    class and function has a docstring, and so does every module-level constant. A docstring's first
+    line is a summary that :func:`summary_problem` accepts, and a function's docstring has the
+    fields :func:`missing_fields` requires. The template is the example that authors copy, so it
+    must meet the standard it asks of them.
 
     :param root: The directory to check, recursively.
     :returns: One description per problem, naming the file, the line and the object. Empty when the
@@ -68,6 +70,7 @@ def docstring_problems(root: Path) -> list[str]:
         where = path.relative_to(root)
         if not ast.get_docstring(tree):
             found.append(f"{where}: the module has no docstring")
+        found += [f"{where}:{line} {name}: {problem}" for line, name, problem in attribute_problems(tree)]
         for node in ast.walk(tree):
             if not isinstance(node, ast.ClassDef | ast.FunctionDef | ast.AsyncFunctionDef):
                 continue
@@ -76,10 +79,62 @@ def docstring_problems(root: Path) -> list[str]:
             if not docstring:
                 found.append(f"{name} has no docstring")
                 continue
-            if not docstring.splitlines()[0].endswith("."):
-                found.append(f"{name}: the summary isn't one line ending with a period")
+            if problem := summary_problem(docstring):
+                found.append(f"{name}: {problem}")
             if not isinstance(node, ast.ClassDef):
                 found += [f"{name} has no {field}" for field in missing_fields(node, docstring)]
+    return found
+
+
+def summary_problem(docstring: str) -> str | None:
+    """
+    Check a docstring's summary, its first line, as pydocstringformatter will.
+
+    pydocstringformatter ends the summary at its first sentence, and moves the rest to the body. A
+    summary of two sentences, or one that wraps onto a second line, is rewritten, and fails the
+    hooks of the generated extension.
+
+    :param docstring: The docstring, as :func:`ast.get_docstring` returns it.
+    :returns: What is wrong with the summary, or None when it is one sentence, on one line, ending
+        with a period.
+    """
+    summary = docstring.splitlines()[0]
+    if not summary.endswith("."):
+        return "the summary isn't one line ending with a period"
+    if re.search(r"[.!?]\s+[A-Z]", summary):
+        return "the summary is more than one sentence"
+    return None
+
+
+def attribute_problems(tree: ast.Module) -> list[tuple[int, str, str]]:
+    """
+    Find the module-level constants and class attributes whose docstrings fall short.
+
+    An attribute's docstring is the string literal on the line after its assignment, which Sphinx
+    autodoc reads. Every module-level constant (an upper-case name) needs one. A class attribute's
+    docstring is optional, but its summary must pass :func:`summary_problem` when it has one.
+
+    :param tree: A module's syntax tree.
+    :returns: The line, the name and the problem, for each attribute that falls short. Empty when
+        none does.
+    """
+    found = []
+    scopes = [tree] + [node for node in ast.walk(tree) if isinstance(node, ast.ClassDef)]
+    for scope in scopes:
+        for statement, following in zip(scope.body, scope.body[1:] + [None]):
+            targets = statement.targets if isinstance(statement, ast.Assign) else [getattr(statement, "target", None)]
+            names = [t.id for t in targets if isinstance(t, ast.Name)]
+            if not names or not isinstance(statement, ast.Assign | ast.AnnAssign):
+                continue
+            documented = (
+                isinstance(following, ast.Expr)
+                and isinstance(following.value, ast.Constant)
+                and isinstance(following.value.value, str)
+            )
+            if documented and (problem := summary_problem(following.value.value.strip())):
+                found.append((statement.lineno, names[0], problem))
+            elif not documented and scope is tree and names[0].isupper():
+                found.append((statement.lineno, names[0], "the constant has no docstring"))
     return found
 
 
