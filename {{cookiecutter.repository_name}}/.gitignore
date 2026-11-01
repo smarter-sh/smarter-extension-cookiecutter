@@ -1,0 +1,14 @@
+__pycache__/
+*.pyc
+dist/
+venv/
+.venv/
+.DS_Store
+.coverage
+coverage.xml
+htmlcov/
+.smarter/
+node_modules/
+package-lock.json
+.mypy_cache/
+.pytest_cache/

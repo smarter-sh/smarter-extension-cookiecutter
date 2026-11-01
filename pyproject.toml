@@ -1,0 +1,11 @@
+# The template's own code style, Smarter's: black and isort, line length 120. The generated
+# extension has its own pyproject.toml, in {{cookiecutter.repository_name}}/.
+[tool.black]
+line-length = 120
+target-version = ["py312"]
+force-exclude = '''^/(\{\{cookiecutter\.repository_name\}\}/|hooks/pre_gen_project\.py)'''
+
+[tool.isort]
+profile = "black"
+line_length = 120
+skip_glob = ["{{cookiecutter.repository_name}}/*"]

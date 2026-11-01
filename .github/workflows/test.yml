@@ -1,0 +1,91 @@
+# Test the template on every push to main and every pull request:
+#
+# - template: tests/test_bake.py generates extensions with different answers and checks them.
+# - generated: for each starter, generate an extension, run its own tests with coverage against a
+#   source checkout of Smarter (as the extension's own Test workflow will), and run its pre-commit
+#   hooks (as its Lint workflow will). A template change that breaks a new extension fails here.
+#
+# SMARTER_REF is the branch or tag of smarter-sh/smarter whose code the generated tests run against:
+# main, the latest release.
+name: Test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+env:
+  SMARTER_REF: main
+
+jobs:
+  template:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.14"
+
+      - name: Install cookiecutter and pre-commit
+        run: pip install -r requirements/local.txt
+
+      - name: Template tests
+        run: python -m unittest discover -s tests -t . -v
+
+      - name: The template repository's own hooks
+        run: pre-commit run --all-files --show-diff-on-failure
+        env:
+          SKIP: commitlint
+
+  generated:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        starter: [web-api, pure-function]
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          path: template
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.14"
+
+      - name: Install cookiecutter and pre-commit
+        run: pip install -r template/requirements/local.txt
+
+      - name: Generate an extension
+        run: cookiecutter --no-input --output-dir build template extension_name="Example Tool" starter=${{ matrix.starter }} cache_ttl=60
+
+      - name: Check out Smarter
+        uses: actions/checkout@v6
+        with:
+          repository: smarter-sh/smarter
+          ref: ${{ env.SMARTER_REF }}
+          path: .smarter
+          sparse-checkout: |
+            smarter/smarter
+            smarter/requirements
+
+      - name: Install Smarter's libraries
+        run: pip install -r .smarter/smarter/requirements/base.txt coverage
+
+      - name: The generated extension's tests, with coverage
+        working-directory: build/smarter-extension-example-tool
+        env:
+          PYTHONPATH: ${{ github.workspace }}/build/smarter-extension-example-tool:${{ github.workspace }}/.smarter/smarter
+        run: |
+          python -m coverage run --source=. --omit='tests/*,scripts/*' -m unittest discover -s tests -t . -v
+          python -m coverage report -m --fail-under=100
+
+      - name: The generated extension's pre-commit hooks
+        working-directory: build/smarter-extension-example-tool
+        run: |
+          git init -q -b main
+          git add -A
+          pre-commit run --all-files --show-diff-on-failure
+        env:
+          SKIP: commitlint

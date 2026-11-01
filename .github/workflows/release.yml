@@ -1,0 +1,47 @@
+# Release the template with semantic-release, on each push to main: see release.config.js. A fix
+# or perf releases a patch, a feat a minor version, and a BREAKING CHANGE a major version; other
+# commits release nothing. A release adds its notes to CHANGELOG.md, commits it, tags the commit
+# v<version>, and creates the GitHub release.
+#
+# It can also be started by hand, from the Actions tab, for example to retry a failed release.
+name: Release
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "22"
+
+      - name: Install semantic-release's plugins
+        run: npm install --no-audit --no-fund
+
+      - name: Semantic release
+        id: semantic
+        uses: cycjimmy/semantic-release-action@v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GIT_COMMITTER_NAME: github-actions[bot]
+          GIT_COMMITTER_EMAIL: github-actions[bot]@users.noreply.github.com
+          GIT_AUTHOR_NAME: github-actions[bot]
+          GIT_AUTHOR_EMAIL: github-actions[bot]@users.noreply.github.com

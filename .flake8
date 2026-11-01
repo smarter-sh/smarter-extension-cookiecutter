@@ -1,0 +1,6 @@
+[flake8]
+max-line-length = 120
+max-complexity = 10
+# E203 and W503 disagree with black.
+extend-ignore = E203,W503
+exclude = .git,__pycache__,venv,.venv,node_modules,build,{{cookiecutter.repository_name}},hooks/pre_gen_project.py

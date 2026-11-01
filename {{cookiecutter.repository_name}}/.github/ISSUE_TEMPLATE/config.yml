@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Smarter documentation
+    url: https://docs.smarter.sh/en/latest/smarter-framework/smarter-extensions.html
+    about: How Smarter Extensions are installed, configured and built.
+  - name: A problem with the Smarter platform itself
+    url: https://github.com/smarter-sh/smarter/issues
+    about: Report bugs in Smarter, rather than in this extension, there.

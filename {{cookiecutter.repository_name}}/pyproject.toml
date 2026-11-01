@@ -1,0 +1,50 @@
+[project]
+name = "{{ cookiecutter.repository_name }}"
+version = "0.0.0"
+description = "{{ cookiecutter.description }}"
+authors = [{ name = "{{ cookiecutter.author_name }}", email = "{{ cookiecutter.author_email }}" }]
+license = "{{ cookiecutter.license }}"
+requires-python = ">=3.12"
+{%- if cookiecutter.starter == "web-api" %}
+dependencies = [
+    "requests>=2.31",
+]
+{%- else %}
+dependencies = []
+{%- endif %}
+
+[project.urls]
+Homepage = "https://github.com/{{ cookiecutter.github_owner }}/{{ cookiecutter.repository_name }}"
+
+[tool.smarter]
+slug = "{{ cookiecutter.extension_slug }}"
+package = "{{ cookiecutter.package_name }}"
+display-name = "{{ cookiecutter.extension_name }}"
+requires-smarter = "{{ cookiecutter.requires_smarter }}"
+tools = ["{{ cookiecutter.package_name }}.tools:{{ cookiecutter.tool_class }}"]
+timeout = {{ cookiecutter.timeout }}
+{%- if cookiecutter.starter == "web-api" %}
+
+[[tool.smarter.settings]]
+name = "api_key"
+type = "secret"
+required = true
+description = "The API key of the service that {{ cookiecutter.tool_name }} calls."
+
+[[tool.smarter.settings]]
+name = "api_url"
+type = "url"
+default = "https://api.example.com/v1/search"
+description = "The service's search api."
+{%- endif %}
+
+# Smarter's code style. Smarter reads only [project] and [tool.smarter], and ignores these.
+[tool.black]
+line-length = 120
+target-version = ["py312"]
+
+[tool.isort]
+profile = "black"
+line_length = 120
+known_third_party = ["smarter"]
+known_first_party = ["{{ cookiecutter.package_name }}"]

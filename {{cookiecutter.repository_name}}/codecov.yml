@@ -1,0 +1,7 @@
+# .github/workflows/test.yml uploads the unit tests' coverage report. The tests cover the package;
+# tests/ and scripts/ are omitted from the report.
+coverage:
+  status:
+    project:
+      default:
+        target: 95%

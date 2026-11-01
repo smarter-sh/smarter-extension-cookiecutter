@@ -1,0 +1,22 @@
+# Monthly updates of semantic-release's plugins and of the workflows' actions. The extension's own
+# dependencies are the Smarter platform's libraries, which it never installs: see pyproject.toml.
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    ignore:
+      # v10+ requires conventional-changelog-writer@9, but
+      # @semantic-release/release-notes-generator@14 still bundles writer@8.
+      - dependency-name: "conventional-changelog-conventionalcommits"
+        update-types: ["version-update:semver-major"]
+    labels:
+      - "dependencies"
+      - "javascript"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    labels:
+      - "dependencies"
+    schedule:
+      interval: "monthly"

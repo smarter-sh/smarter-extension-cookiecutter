@@ -1,0 +1,46 @@
+name: "🐛 Bug Report"
+description: Report a bug in the {{ cookiecutter.extension_name }} extension.
+title: "🐛 [BUG] - <title>"
+labels: ["bug"]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: "Description"
+      description: What happened, and what you expected to happen.
+      placeholder: The {{ cookiecutter.tool_name }} tool returned ...
+    validations:
+      required: true
+  - type: textarea
+    id: reprod
+    attributes:
+      label: "Reproduction steps"
+      description: The prompt, the tool call's arguments and its result, from the chat's Smarter messages.
+      value: |
+        1. Ask the LLMClient '...'
+        2. The LLM calls ext_{{ cookiecutter.extension_slug | replace('-', '_') }}_{{ cookiecutter.tool_name }} with '...'
+        3. The result is '...'
+    validations:
+      required: true
+  - type: input
+    id: extension-version
+    attributes:
+      label: "Extension version"
+      placeholder: e.g. 1.2.0
+    validations:
+      required: true
+  - type: input
+    id: smarter-version
+    attributes:
+      label: "Smarter version"
+      placeholder: e.g. 0.40.4
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: "Logs"
+      description: Any relevant log output, with API keys and personal data removed.
+      render: bash
+    validations:
+      required: false

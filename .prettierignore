@@ -1,0 +1,3 @@
+# The template's files hold Jinja, which Prettier can't parse. The Test workflow lints the
+# generated extensions instead.
+{{cookiecutter.repository_name}}/

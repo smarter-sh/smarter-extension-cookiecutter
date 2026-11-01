@@ -1,0 +1,1 @@
+# Words that codespell flags wrongly in this repository, one per line.

@@ -1,0 +1,28 @@
+# Run the pre-commit hooks on every file, on each push to main and each pull request: the same
+# lint and format standard that `make lint` applies locally. commitlint runs only locally, on
+# commit messages.
+name: Lint
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  pre-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.14"
+
+      - name: Install pre-commit
+        run: pip install -r requirements/local.txt
+
+      - name: Run the hooks
+        run: pre-commit run --all-files --show-diff-on-failure
+        env:
+          SKIP: commitlint

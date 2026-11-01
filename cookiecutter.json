@@ -1,0 +1,56 @@
+{
+  "extension_name": "My Extension",
+  "extension_slug": "{{ cookiecutter.extension_name | lower | replace(' ', '-') | replace('_', '-') }}",
+  "package_name": "{{ cookiecutter.extension_slug | replace('-', '_') }}",
+  "repository_name": "smarter-extension-{{ cookiecutter.extension_slug }}",
+  "description": "What the extension gives LLMs, in one line.",
+  "starter": ["web-api", "pure-function"],
+  "tool_name": "{{ cookiecutter.package_name }}",
+  "tool_class": "{{ cookiecutter.tool_name | replace('_', ' ') | title | replace(' ', '') }}",
+  "cache_ttl": "0",
+  "timeout": "30",
+  "requires_smarter": ">=0.27",
+  "author_name": "Your Name",
+  "author_email": "you@example.com",
+  "github_owner": "your-github-account",
+  "publisher_id": "{{ cookiecutter.github_owner | lower }}",
+  "license": ["AGPL-3.0", "MIT", "Apache-2.0"],
+  "__prompts__": {
+    "extension_name": "The extension's name, shown to administrators (display-name)",
+    "extension_slug": "Its slug: permanent, lowercase words separated by hyphens, at most 32 characters",
+    "package_name": "Its Python package",
+    "repository_name": "Its GitHub repository",
+    "description": "One line on what it gives LLMs",
+    "starter": {
+      "__prompt__": "Which starter tool?",
+      "web-api": "web-api: calls a third-party HTTP API, with an api_key secret setting and an api_url setting",
+      "pure-function": "pure-function: computes its result in Python, with no settings"
+    },
+    "tool_name": "The tool's name (the LLM sees ext_<slug>_<name>): letters, digits and underscores",
+    "tool_class": "The tool's Python class",
+    "cache_ttl": "Seconds to cache the tool's results (0 = never; only for a tool that changes nothing and answers the same whoever asks)",
+    "timeout": "Seconds that a tool call may run (1 to 300)",
+    "requires_smarter": "The Smarter versions it works with",
+    "author_name": "Your name",
+    "author_email": "Your email",
+    "github_owner": "The GitHub user or organization that will own the repository",
+    "publisher_id": "Your publisher id in the Smarter Extension registry",
+    "license": {
+      "__prompt__": "License",
+      "AGPL-3.0": "AGPL-3.0, Smarter's own license",
+      "MIT": "MIT",
+      "Apache-2.0": "Apache-2.0"
+    }
+  },
+  "_copy_without_render": [
+    ".github/workflows/*",
+    "skills/*",
+    "scripts/*",
+    "release.config.js",
+    "package.json",
+    "commitlint.config.js",
+    "Makefile",
+    "_licenses/AGPL-3.0.txt",
+    "_licenses/Apache-2.0.txt"
+  ]
+}
