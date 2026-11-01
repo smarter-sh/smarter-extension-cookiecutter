@@ -22,7 +22,7 @@ jobs:
   template:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - uses: actions/setup-python@v6
         with:
@@ -46,7 +46,7 @@ jobs:
       matrix:
         starter: [web-api, pure-function]
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           path: template
 
@@ -61,7 +61,7 @@ jobs:
         run: cookiecutter --no-input --output-dir build template extension_name="Example Tool" starter=${{ matrix.starter }} cache_ttl=60
 
       - name: Check out Smarter
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           repository: smarter-sh/smarter
           ref: ${{ env.SMARTER_REF }}
