@@ -77,7 +77,7 @@ pre-commit-update:
 lint:
 	make pre-commit-run
 
-# the unit tests, with coverage, in the smarter-app container of a Smarter development
+# the unit tests, with coverage, in the smarter-api container of a Smarter development
 # environment (a checkout of smarter-sh/smarter, started with its `make run`).
 test:
 	scripts/run-tests.sh
@@ -97,7 +97,7 @@ clean:
 help:
 	@echo '===================================================================='
 	@echo 'init                   - Create the virtual environment and install the pre-commit hooks'
-	@echo 'test                   - Run the tests, with coverage, in the smarter-app container'
+	@echo 'test                   - Run the tests, with coverage, in the smarter-api container'
 	@echo 'validate               - Run the tests, then manage.py validate_extension'
 	@echo 'package                - Build the release archive in dist/'
 	@echo 'clean                  - Delete the virtual environment and build artifacts'

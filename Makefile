@@ -64,7 +64,7 @@ bake:
 	$(ACTIVATE_VENV) && cookiecutter --no-input --overwrite-if-exists --output-dir $(BUILD) .
 
 # generate one extension per starter into build/, and run each one's own tests and
-# validate_extension in a Smarter development container (smarter-app), as an author would.
+# validate_extension in a Smarter development container (smarter-api), as an author would.
 test-generated:
 	$(ACTIVATE_VENV) && \
 	cookiecutter --no-input --overwrite-if-exists --output-dir $(BUILD) . extension_name="Example Web Api" starter=web-api && \
@@ -101,7 +101,7 @@ help:
 	@echo 'init                   - Create the virtual environment and install the pre-commit hooks'
 	@echo 'test                   - Run the template tests (generate and check extensions)'
 	@echo 'bake                   - Generate an extension with the default answers into build/'
-	@echo 'test-generated         - Generate both starters and run their tests in smarter-app'
+	@echo 'test-generated         - Generate both starters and run their tests in smarter-api'
 	@echo 'lint-generated         - Generate both starters and run their pre-commit hooks'
 	@echo 'lint                   - Run all code linters and formatters (pre-commit)'
 	@echo 'clean                  - Delete the virtual environment and build/'

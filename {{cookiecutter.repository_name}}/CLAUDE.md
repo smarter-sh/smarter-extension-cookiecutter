@@ -10,7 +10,7 @@ This is the **{{ cookiecutter.extension_name }}** Smarter Extension (slug
 A Smarter Extension is a Python package that a Smarter platform installs from the signed registry
 (smarter-sh/extensions-registry) and runs inside itself. Its tools subclass
 `smarter.apps.llmtool.extension.SmarterExtensionTool`, so the tests run against a checkout of
-smarter-sh/smarter: the sibling `../smarter` and its `smarter-app` container.
+smarter-sh/smarter: the sibling `../smarter` and its `smarter-api` container.
 
 This repository was generated from smarter-sh/smarter-extension-cookiecutter. Detailed know-how
 lives in the Agent Skills under `skills/` (symlinked to `.claude/skills`).
@@ -24,7 +24,7 @@ lives in the Agent Skills under `skills/` (symlinked to `.claude/skills`).
    on each push to `main`, and the commit type decides the release. See `smarter-extension-release`.
 3. **Run the tests yourself**, after any change: `make validate` (the tests with coverage, then
    `manage.py validate_extension`). Never ask the user to. Report failures honestly.
-4. **The `smarter-app` container holds the developer's credentials.** Tests mock every third-party
+4. **The `smarter-api` container holds the developer's credentials.** Tests mock every third-party
    service and use placeholder keys. Don't run anything there that writes to real infrastructure.
 5. **Import only what the platform installs** (`../smarter/smarter/requirements/base.txt`), and
    use relative imports inside the package.

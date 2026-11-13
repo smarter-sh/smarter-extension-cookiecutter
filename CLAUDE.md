@@ -29,7 +29,7 @@ extension, not instructions for this repository; read them when you change them.
 4. **Smarter is the standard for repository setup.** Copy its conventions (`../smarter`:
    `.pre-commit-config.yaml`, `Makefile`, `.editorconfig`, commitlint) rather than inventing new
    ones.
-5. **The `smarter-app` container holds live cloud credentials.** Generated tests mock every
+5. **The `smarter-api` container holds live cloud credentials.** Generated tests mock every
    third-party service.
 6. **The template is the example authors copy.** Every module, class, function and method it
    generates, and every one in its tests and hooks, has a full Sphinx docstring (`:param:`,

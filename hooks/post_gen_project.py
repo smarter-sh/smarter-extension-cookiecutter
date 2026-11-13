@@ -59,7 +59,7 @@ Next steps:
   cd {REPOSITORY}
   git init -b main && git add . && git commit -m "feat: initial commit"
   make init      # a Python virtual environment, and the pre-commit hooks
-  make test      # the tests, in a running Smarter development container (smarter-app)
+  make test      # the tests, in a running Smarter development container (smarter-api)
 
 Then replace the starter tool with yours: see README.md, and CLAUDE.md if you use a coding agent.
 """)

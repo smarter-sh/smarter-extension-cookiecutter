@@ -90,7 +90,7 @@ make test-generated   # generate both starters into build/, run each one's scrip
 make lint-generated   # generate each starter, cached and uncached, and run its pre-commit hooks
 ```
 
-`make test-generated` needs the `smarter-app` container of `../smarter` running. Run it, and
+`make test-generated` needs the `smarter-api` container of `../smarter` running. Run it, and
 `make lint-generated`, after any change to what is generated.
 
 **Never lint generated output by passing untracked files to `pre-commit run --files`.** pre-commit

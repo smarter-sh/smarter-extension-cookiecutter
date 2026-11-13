@@ -4,7 +4,7 @@ Thank you for helping improve the {{ cookiecutter.extension_name }} Smarter Exte
 
 1. Set up a [Smarter development environment](https://github.com/smarter-sh/smarter): clone it
    beside this repository, and run its `make init` and `make run`. The tests run in its
-   `smarter-app` container, against Smarter's code.
+   `smarter-api` container, against Smarter's code.
 2. In this repository, run `make init`, which creates a virtual environment and installs the
    pre-commit hooks.
 3. Make your change, with tests: `make test` runs them with coverage, which stays at 100%, and

@@ -29,12 +29,12 @@ spec:
 ## Develop
 
 An extension runs inside a Smarter platform, so its tests run against Smarter's code, in the
-`smarter-app` container of a [Smarter development environment](https://github.com/smarter-sh/smarter)
+`smarter-api` container of a [Smarter development environment](https://github.com/smarter-sh/smarter)
 cloned beside this repository (its `make init`, then `make run`).
 
 ```console
 make init        # a virtual environment, and the pre-commit hooks
-make test        # the tests, with coverage, in the smarter-app container
+make test        # the tests, with coverage, in the smarter-api container
 make validate    # the tests, then the checks that the installer and the registry make
 make lint        # every pre-commit hook, on every file
 make package     # dist/{{ cookiecutter.extension_slug }}-<version>.zip, as a release builds it
