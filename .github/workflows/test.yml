@@ -77,8 +77,12 @@ jobs:
             smarter/smarter
             smarter/requirements
 
+      # base.txt is hashed, which turns on --require-hashes for the whole pip command, so coverage
+      # (pinned to the version in smarter's local.txt) is installed by a command of its own.
       - name: Install Smarter's libraries
-        run: pip install -r .smarter/smarter/requirements/base.txt coverage
+        run: |
+          pip install -r .smarter/smarter/requirements/base.txt
+          pip install coverage==7.17.2
 
       - name: The generated extension's tests, with coverage
         working-directory: build/smarter-extension-example-tool
