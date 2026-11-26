@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.3](https://github.com/smarter-sh/smarter-extension-cookiecutter/compare/v1.0.2...v1.0.3) (2026-11-26)
+
+### Bug Fixes
+
+* **template:** install coverage apart from smarter's hashed base.txt ([9463bd5](https://github.com/smarter-sh/smarter-extension-cookiecutter/commit/9463bd5145008e6c407048c645a72a7b2ea8a87a))
+
 ## [1.0.2](https://github.com/smarter-sh/smarter-extension-cookiecutter/compare/v1.0.1...v1.0.2) (2026-11-13)
 
 ### Bug Fixes
